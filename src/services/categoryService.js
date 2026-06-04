@@ -1,6 +1,6 @@
 import {
     fetchCategories,
-    fecthCategoryById,
+    fetchCategoryById,
     createCategory,
     updateCategory,
     deleteCategory
@@ -18,7 +18,7 @@ export const getCategories = async () => {
 }
 
 export const getCategoryById = async (id) => {
-    const {data, error} = await fecthCategoryById(id);
+    const {data, error} = await fetchCategoryById(id);
     if (error) throw new Error(error.message);
     return categoryAdapter(data);
 }

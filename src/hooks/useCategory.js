@@ -4,7 +4,7 @@ import {
   addCategory,
   editCategory,
   removeCategory,
-} from '../services/category.service'
+} from '../services/categoryService'
 
 export const useCategory = () => {
   const [categories, setCategories] = useState([])
@@ -57,6 +57,7 @@ export const useCategory = () => {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadCategories()
   }, [])
 

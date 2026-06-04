@@ -1,5 +1,7 @@
+import CategoryPage from './pages/CategoryPage'
+
 function App() {
-  return <></>
+  return <CategoryPage />
 }
 
 export default App
