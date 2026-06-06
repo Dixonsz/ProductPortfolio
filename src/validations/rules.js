@@ -19,6 +19,11 @@ export const requiredString = z
   .trim()
   .min(1, 'Este campo es requerido')
 
+export const hexField = z
+  .string()
+  .trim()
+  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, 'Color hex inválido')
+
   export const categorySchema = z.object({
     name: nameField,
   })
@@ -37,4 +42,9 @@ export const stateSchema = z.object({
 
 export const sizeSchema = z.object({
   name: nameField,
+})
+
+export const colorSchema = z.object({
+  name: nameField,
+  hex_code: hexField,
 })

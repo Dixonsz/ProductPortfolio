@@ -9,7 +9,7 @@ export const NAV_SECTIONS = [
       { label: "Tallas", path: "/sizes", icon: "straighten" },
       { label: "Géneros", path: "/genders", icon: "group" },
       { label: "Estados", path: "/state", icon: "toggle_on" },
-      { label: "Colores", path: "/color", icon: "palette" },
+      { label: "Colores", path: "/colors", icon: "palette" },
       { label: "Materiales", path: "/material", icon: "texture" },
     ],
   },

@@ -7,6 +7,7 @@ import {
   LazyStatePage,
   LazySizePage,
   LazyMainLayout,
+  LazyColorPage,
 } from "./lazyRoutes";
 
 export const router = createBrowserRouter([
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "sizes",
         element: <LazySizePage />,
+      },
+      {
+        path: "colors",
+        element: <LazyColorPage />,
       },
     ],
   },
