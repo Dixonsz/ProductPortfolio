@@ -1,7 +1,7 @@
-import CategoryPage from './pages/CategoryPage'
+// App.jsx
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
-function App() {
-  return <CategoryPage />
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App

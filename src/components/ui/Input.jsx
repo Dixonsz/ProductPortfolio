@@ -1,4 +1,4 @@
-import propTypes from "prop-types";
+import PropTypes from "prop-types";
 
 function Input({ type = "text", placeholder, value, onChange }) {
   return (
@@ -13,10 +13,10 @@ function Input({ type = "text", placeholder, value, onChange }) {
 }
 
 Input.propTypes = {
-  type: propTypes.string,
-  placeholder: propTypes.string,
-  value: propTypes.string.OneOfType([propTypes.string, propTypes.number]),
-  onChange: propTypes.func,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
 };
 
 export default Input;
