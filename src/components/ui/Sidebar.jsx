@@ -15,7 +15,7 @@ export default function Sidebar({ sections = NAV_SECTIONS }) {
       <div className="mb-10 flex items-center justify-between px-5">
         <div className="flex items-center gap-3 overflow-hidden">
           <div className="flex h-9 min-w-9 flex-shrink-0 items-center justify-center rounded-sm bg-primary">
-            <span className="font-display text-[20px] text-on-primary">P</span>
+            <span className="font-display text-[20px] text-on-primary">A</span>
           </div>
           {!collapsed && (
             <div className="transition-opacity duration-300">

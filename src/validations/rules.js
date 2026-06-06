@@ -34,3 +34,7 @@ export const genderSchema = z.object({
 export const stateSchema = z.object({
   name: nameField,
 })
+
+export const sizeSchema = z.object({
+  name: nameField,
+})
