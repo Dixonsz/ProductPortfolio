@@ -8,39 +8,43 @@ export default function Sidebar({ sections = NAV_SECTIONS }) {
 
   return (
     <aside
-      className={`h-screen bg-surface border-r border-outline-variant flex flex-col py-8 transition-all duration-300 ease-out z-50 ${
+      className={`z-50 flex h-screen flex-col border-r border-outline-variant bg-surface-container-low py-8 transition-all duration-300 ease-out ${
         collapsed ? "w-[4.5rem]" : "w-64"
       }`}
     >
-      {/* Header */}
-      <div className="px-6 mb-10 flex items-center justify-between">
+      <div className="mb-10 flex items-center justify-between px-5">
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="min-w-[32px] h-[32px] bg-primary flex items-center justify-center rounded-sm flex-shrink-0">
-            <span className="text-white font-headline-sm text-[18px]">A</span>
+          <div className="flex h-9 min-w-9 flex-shrink-0 items-center justify-center rounded-sm bg-primary">
+            <span className="font-display text-[20px] text-on-primary">P</span>
           </div>
           {!collapsed && (
-            <span className="font-headline-sm tracking-widest text-primary transition-opacity duration-300">
-              AURELIA
-            </span>
+            <div className="transition-opacity duration-300">
+              <p className="font-display text-headline-md leading-none text-on-surface">
+                Amar y Ya
+              </p>
+              <p className="mt-1 text-label-sm font-semibold uppercase tracking-widest text-on-surface-variant">
+                Administración
+              </p>
+            </div>
           )}
         </div>
         <button
+          type="button"
           onClick={toggle}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="p-1 hover:bg-surface-container rounded-full transition-colors"
+          aria-label={collapsed ? "Expandir menú" : "Contraer menú"}
+          className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary"
         >
-          <span className="material-symbols-outlined text-on-surface-variant">
+          <span className="material-symbols-outlined">
             {collapsed ? "menu" : "menu_open"}
           </span>
         </button>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 space-y-8">
+      <nav className="flex-1 space-y-8 overflow-y-auto px-3">
         {sections.map((section) => (
           <div key={section.label}>
             {!collapsed && (
-              <p className="px-3 mb-4 font-label-caps text-label-caps text-outline uppercase tracking-widest transition-opacity duration-300">
+              <p className="mb-4 px-3 text-label-sm font-semibold uppercase tracking-widest text-outline transition-opacity duration-300">
                 {section.label}
               </p>
             )}
@@ -49,10 +53,11 @@ export default function Sidebar({ sections = NAV_SECTIONS }) {
                 <li key={item.path}>
                   <NavLink
                     to={item.path}
+                    end={item.path === "/"}
                     className={({ isActive }) =>
-                      `flex items-center gap-4 px-3 py-3 rounded-sm transition-all duration-300 ${
+                      `flex items-center gap-4 px-3 py-3 transition-all duration-300 ${
                         isActive
-                          ? "text-secondary border-r-2 border-secondary bg-surface-container-low"
+                          ? "border-r-4 border-primary bg-surface-container text-primary"
                           : "text-on-surface-variant hover:text-primary hover:bg-surface-container"
                       }`
                     }
@@ -63,7 +68,7 @@ export default function Sidebar({ sections = NAV_SECTIONS }) {
                       </span>
                     )}
                     {!collapsed && (
-                      <span className="font-nav-item text-nav-item whitespace-nowrap">
+                      <span className="whitespace-nowrap text-body-md font-medium">
                         {item.label}
                       </span>
                     )}

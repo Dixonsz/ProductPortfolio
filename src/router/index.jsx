@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../pages/MainLayout";
+import DashboardPage from "../pages/DashboardPage";
 import CategoryPage from "../pages/CategoryPage";
 
 export const router = createBrowserRouter([
@@ -9,7 +10,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <div>Dashboard</div>,
+        element: <DashboardPage />,
       },
       {
         path: "products",

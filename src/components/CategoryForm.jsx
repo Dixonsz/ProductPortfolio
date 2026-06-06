@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
 import { categorySchema } from "../validations/categoryValidation";
 
 function CategoryForm({ onSubmit, defaultValues, onCancel }) {
@@ -29,28 +31,25 @@ function CategoryForm({ onSubmit, defaultValues, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="name">Nombre de la categoría:</label>
-        <input
-          id="name"
-          type="text"
-          placeholder="Ejemplo: Ropa Deportiva"
-          value={name}
-          disabled={isSubmitting}
-          onChange={(event) => setName(event.target.value)}
-        />
-        {error && <span>{error}</span>}
-      </div>
+    <form onSubmit={handleFormSubmit} className="space-y-5">
+      <Input
+        id="name"
+        label="Nombre de la categoría"
+        placeholder="Ropa deportiva"
+        value={name}
+        disabled={isSubmitting}
+        error={error}
+        onChange={(event) => setName(event.target.value)}
+      />
 
-      <div className="flex gap-2">
-        <button type="submit" disabled={isSubmitting}>
+      <div className="flex flex-wrap gap-2">
+        <Button type="submit" disabled={isSubmitting} icon={defaultValues ? "save" : "add"}>
           {isSubmitting ? "Guardando..." : defaultValues ? "Actualizar" : "Crear"}
-        </button>
+        </Button>
         {onCancel && (
-          <button type="button" disabled={isSubmitting} onClick={onCancel}>
+          <Button type="button" variant="secondary" disabled={isSubmitting} onClick={onCancel}>
             Cancelar
-          </button>
+          </Button>
         )}
       </div>
     </form>
