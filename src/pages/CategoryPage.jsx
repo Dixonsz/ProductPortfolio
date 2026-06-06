@@ -1,21 +1,38 @@
 import { useState } from "react";
 import Table from "../components/ui/Table";
-import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
+import SlidePanel from "../components/ui/SlidePanel";
 import CategoryForm from "../components/CategoryForm";
 import { useCategory } from "../hooks/useCategory";
 
 function CategoryPage() {
   const { categories, loading, error, create, update, remove } = useCategory();
   const [editing, setEditing] = useState(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const closePanel = () => {
+    setIsPanelOpen(false);
+    setEditing(null);
+  };
+
+  const openCreatePanel = () => {
+    setEditing(null);
+    setIsPanelOpen(true);
+  };
+
+  const openEditPanel = (category) => {
+    setEditing(category);
+    setIsPanelOpen(true);
+  };
 
   const handleCreate = async (data) => {
     await create(data);
+    closePanel();
   };
 
   const handleUpdate = async (data) => {
     await update(editing.id, data);
-    setEditing(null);
+    closePanel();
   };
 
   const handleDelete = async (row) => {
@@ -28,14 +45,14 @@ function CategoryPage() {
     { label: "Acciones", key: "actions" },
   ];
 
-  const rows = categories.map((cat) => ({
-    ...cat,
+  const rows = categories.map((category) => ({
+    ...category,
     actions: (
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" icon="edit" onClick={() => setEditing(cat)}>
+        <Button variant="ghost" icon="edit" onClick={() => openEditPanel(category)}>
           Editar
         </Button>
-        <Button variant="danger" icon="delete" onClick={() => handleDelete(cat)}>
+        <Button variant="danger" icon="delete" onClick={() => handleDelete(category)}>
           Eliminar
         </Button>
       </div>
@@ -44,6 +61,11 @@ function CategoryPage() {
 
   if (loading) return <p className="text-on-surface-variant">Cargando categorías...</p>;
   if (error) return <p className="text-error">Error: {error}</p>;
+
+  const panelTitle = editing ? "Editar categoría" : "Nueva categoría";
+  const panelDescription = editing
+    ? "Actualiza el nombre manteniendo la estructura del catálogo."
+    : "Crea una categoría reutilizable para productos actuales y futuros.";
 
   return (
     <div className="space-y-8">
@@ -57,26 +79,24 @@ function CategoryPage() {
             Administra los grupos usados para organizar los productos del portafolio.
           </p>
         </div>
+        <Button icon="add" onClick={openCreatePanel}>
+          Agregar
+        </Button>
       </section>
 
-      <Card tone="muted">
-        <div className="mb-6">
-          <h3 className="font-display text-headline-md">
-            {editing ? "Editar categoría" : "Nueva categoría"}
-          </h3>
-          <p className="text-on-surface-variant">
-            {editing
-              ? "Actualiza el nombre manteniendo la estructura del catálogo."
-              : "Crea una categoría reutilizable para productos actuales y futuros."}
-          </p>
-        </div>
+      <SlidePanel
+        isOpen={isPanelOpen}
+        title={panelTitle}
+        description={panelDescription}
+        onClose={closePanel}
+      >
         <CategoryForm
           key={editing?.id ?? "new"}
           onSubmit={editing ? handleUpdate : handleCreate}
           defaultValues={editing ?? undefined}
-          onCancel={editing ? () => setEditing(null) : undefined}
+          onCancel={closePanel}
         />
-      </Card>
+      </SlidePanel>
 
       <Table columns={columns} data={rows} emptyMessage="Aún no hay categorías registradas." />
     </div>

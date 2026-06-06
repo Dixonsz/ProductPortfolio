@@ -1,21 +1,38 @@
 import { useState } from "react";
 import Table from "../components/ui/Table";
-import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
+import SlidePanel from "../components/ui/SlidePanel";
 import GenderForm from "../components/GenderForm";
 import { useGender } from "../hooks/useGender";
 
 function GenderPage() {
   const { genders, loading, error, create, update, remove } = useGender();
   const [editing, setEditing] = useState(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const closePanel = () => {
+    setIsPanelOpen(false);
+    setEditing(null);
+  };
+
+  const openCreatePanel = () => {
+    setEditing(null);
+    setIsPanelOpen(true);
+  };
+
+  const openEditPanel = (gender) => {
+    setEditing(gender);
+    setIsPanelOpen(true);
+  };
 
   const handleCreate = async (data) => {
     await create(data);
+    closePanel();
   };
 
   const handleUpdate = async (data) => {
     await update(editing.id, data);
-    setEditing(null);
+    closePanel();
   };
 
   const handleDelete = async (row) => {
@@ -32,7 +49,7 @@ function GenderPage() {
     ...gender,
     actions: (
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" icon="edit" onClick={() => setEditing(gender)}>
+        <Button variant="ghost" icon="edit" onClick={() => openEditPanel(gender)}>
           Editar
         </Button>
         <Button variant="danger" icon="delete" onClick={() => handleDelete(gender)}>
@@ -44,6 +61,11 @@ function GenderPage() {
 
   if (loading) return <p className="text-on-surface-variant">Cargando géneros...</p>;
   if (error) return <p className="text-error">Error: {error}</p>;
+
+  const panelTitle = editing ? "Editar género" : "Nuevo género";
+  const panelDescription = editing
+    ? "Actualiza el nombre manteniendo la estructura del catálogo."
+    : "Crea un género reutilizable para productos actuales y futuros.";
 
   return (
     <div className="space-y-8">
@@ -57,26 +79,24 @@ function GenderPage() {
             Administra los grupos usados para organizar los productos del portafolio.
           </p>
         </div>
+        <Button icon="add" onClick={openCreatePanel}>
+          Agregar
+        </Button>
       </section>
 
-      <Card tone="muted">
-        <div className="mb-6">
-          <h3 className="font-display text-headline-md">
-            {editing ? "Editar género" : "Nuevo género"}
-          </h3>
-          <p className="text-on-surface-variant">
-            {editing
-              ? "Actualiza el nombre manteniendo la estructura del catálogo."
-              : "Crea una marca reutilizable para productos actuales y futuros."}
-          </p>
-        </div>
+      <SlidePanel
+        isOpen={isPanelOpen}
+        title={panelTitle}
+        description={panelDescription}
+        onClose={closePanel}
+      >
         <GenderForm
           key={editing?.id ?? "new"}
           onSubmit={editing ? handleUpdate : handleCreate}
           defaultValues={editing ?? undefined}
-          onCancel={editing ? () => setEditing(null) : undefined}
+          onCancel={closePanel}
         />
-      </Card>
+      </SlidePanel>
 
       <Table columns={columns} data={rows} emptyMessage="Aún no hay géneros registrados." />
     </div>
