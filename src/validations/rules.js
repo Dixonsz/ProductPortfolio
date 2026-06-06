@@ -30,3 +30,7 @@ export const requiredString = z
 export const genderSchema = z.object({
   name: nameField,
 })
+
+export const stateSchema = z.object({
+  name: nameField,
+})

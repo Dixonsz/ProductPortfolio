@@ -4,6 +4,7 @@ import {
   LazyBrandPage,
   LazyDashboardPage,
   LazyGenderPage,
+  LazyStatePage,
   LazyMainLayout,
 } from "./lazyRoutes";
 
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: "genders",
         element: <LazyGenderPage />,
+      },
+      {
+        path: "states",
+        element: <LazyStatePage />,
       },
     ],
   },
