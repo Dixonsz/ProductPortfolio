@@ -26,3 +26,7 @@ export const requiredString = z
   export const brandSchema = z.object({
     name: nameField,
   })
+
+export const genderSchema = z.object({
+  name: nameField,
+})
