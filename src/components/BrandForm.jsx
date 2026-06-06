@@ -2,7 +2,8 @@ import propTypes from "prop-types";
 import { useState } from "react";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import { categorySchema } from "../validations/rules";
+import { brandSchema } from "../validations/rules";
+
 
 function getSubmitLabel(isSubmitting, defaultValues) {
   if (isSubmitting) return "Guardando...";
@@ -10,7 +11,7 @@ function getSubmitLabel(isSubmitting, defaultValues) {
   return "Crear";
 }
 
-function CategoryForm({ onSubmit, defaultValues, onCancel }) {
+function BrandForm({ onSubmit, defaultValues, onCancel }) {
   const [name, setName] = useState(defaultValues?.name || "");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,7 +19,7 @@ function CategoryForm({ onSubmit, defaultValues, onCancel }) {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const result = categorySchema.safeParse({ name });
+    const result = brandSchema.safeParse({ name });
     if (!result.success) {
       setError(result.error.issues[0]?.message || "Datos inválidos");
       return;
@@ -41,8 +42,8 @@ function CategoryForm({ onSubmit, defaultValues, onCancel }) {
     <form onSubmit={handleFormSubmit} className="space-y-5">
       <Input
         id="name"
-        label="Nombre de la categoría"
-        placeholder="Ropa deportiva"
+        label="Nombre de la marca"
+        placeholder="Nike, Adidas, etc."
         value={name}
         disabled={isSubmitting}
         error={error}
@@ -72,7 +73,7 @@ function CategoryForm({ onSubmit, defaultValues, onCancel }) {
   );
 }
 
-CategoryForm.propTypes = {
+BrandForm.propTypes = {
   onSubmit: propTypes.func.isRequired,
   onCancel: propTypes.func,
   defaultValues: propTypes.shape({
@@ -80,9 +81,9 @@ CategoryForm.propTypes = {
   }),
 };
 
-CategoryForm.defaultProps = {
+BrandForm.defaultProps = {
   onCancel: null,
   defaultValues: null,
 };
 
-export default CategoryForm;
+export default BrandForm;

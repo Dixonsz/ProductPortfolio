@@ -1,16 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainLayout from "../pages/MainLayout";
-import DashboardPage from "../pages/DashboardPage";
-import CategoryPage from "../pages/CategoryPage";
+import {
+  LazyCategoryPage,
+  LazyBrandPage,
+  LazyDashboardPage,
+  LazyMainLayout,
+} from "./lazyRoutes";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <LazyMainLayout />,
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <LazyDashboardPage />,
       },
       {
         path: "products",
@@ -18,7 +21,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "categories",
-        element: <CategoryPage />,
+        element: <LazyCategoryPage />,
+      },
+      {
+        path: "brands",
+        element: <LazyBrandPage />,
       },
     ],
   },

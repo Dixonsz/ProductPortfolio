@@ -2,11 +2,11 @@ import { useState } from "react";
 import Table from "../components/ui/Table";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
-import CategoryForm from "../components/CategoryForm";
-import { useCategory } from "../hooks/useCategory";
+import BrandForm from "../components/BrandForm";
+import { useBrand } from "../hooks/useBrand";
 
-function CategoryPage() {
-  const { categories, loading, error, create, update, remove } = useCategory();
+function BrandPage() {
+  const { brands, loading, error, create, update, remove } = useBrand();
   const [editing, setEditing] = useState(null);
 
   const handleCreate = async (data) => {
@@ -28,21 +28,21 @@ function CategoryPage() {
     { label: "Acciones", key: "actions" },
   ];
 
-  const rows = categories.map((cat) => ({
-    ...cat,
+  const rows = brands.map((brand) => ({
+    ...brand,
     actions: (
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" icon="edit" onClick={() => setEditing(cat)}>
+        <Button variant="ghost" icon="edit" onClick={() => setEditing(brand)}>
           Editar
         </Button>
-        <Button variant="danger" icon="delete" onClick={() => handleDelete(cat)}>
+        <Button variant="danger" icon="delete" onClick={() => handleDelete(brand)}>
           Eliminar
         </Button>
       </div>
     ),
   }));
 
-  if (loading) return <p className="text-on-surface-variant">Cargando categorías...</p>;
+  if (loading) return <p className="text-on-surface-variant">Cargando marcas...</p>;
   if (error) return <p className="text-error">Error: {error}</p>;
 
   return (
@@ -52,7 +52,7 @@ function CategoryPage() {
           <p className="text-label-sm font-semibold uppercase tracking-widest text-primary">
             Catálogo
           </p>
-          <h2 className="font-display text-headline-lg text-on-surface">Categorías</h2>
+          <h2 className="font-display text-headline-lg text-on-surface">Marcas</h2>
           <p className="mt-2 max-w-2xl text-body-md text-on-surface-variant">
             Administra los grupos usados para organizar los productos del portafolio.
           </p>
@@ -62,15 +62,15 @@ function CategoryPage() {
       <Card tone="muted">
         <div className="mb-6">
           <h3 className="font-display text-headline-md">
-            {editing ? "Editar categoría" : "Nueva categoría"}
+            {editing ? "Editar marca" : "Nueva marca"}
           </h3>
           <p className="text-on-surface-variant">
             {editing
               ? "Actualiza el nombre manteniendo la estructura del catálogo."
-              : "Crea una categoría reutilizable para productos actuales y futuros."}
+              : "Crea una marca reutilizable para productos actuales y futuros."}
           </p>
         </div>
-        <CategoryForm
+        <BrandForm
           key={editing?.id ?? "new"}
           onSubmit={editing ? handleUpdate : handleCreate}
           defaultValues={editing ?? undefined}
@@ -78,9 +78,9 @@ function CategoryPage() {
         />
       </Card>
 
-      <Table columns={columns} data={rows} emptyMessage="Aún no hay categorías registradas." />
+      <Table columns={columns} data={rows} emptyMessage="Aún no hay marcas registradas." />
     </div>
   );
 }
 
-export default CategoryPage;
+export default BrandPage;
