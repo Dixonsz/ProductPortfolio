@@ -50,10 +50,8 @@ function BrandPage() {
     actions: (
       <div className="flex justify-end gap-2">
         <Button variant="ghost" icon="edit" onClick={() => openEditPanel(brand)}>
-          Editar
         </Button>
         <Button variant="danger" icon="delete" onClick={() => handleDelete(brand)}>
-          Eliminar
         </Button>
       </div>
     ),
@@ -71,12 +69,9 @@ function BrandPage() {
     <div className="space-y-8">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-label-sm font-semibold uppercase tracking-widest text-primary">
-            Catálogo
-          </p>
-          <h2 className="font-display text-headline-lg text-on-surface">Marcas</h2>
+          <h2 className="font-display text-headline-lg text-on-surface">Gestión de Marcas</h2>
           <p className="mt-2 max-w-2xl text-body-md text-on-surface-variant">
-            Administra los grupos usados para organizar los productos del portafolio.
+            Administra las marcas disponibles para clasificar sus productos.
           </p>
         </div>
         <Button icon="add" onClick={openCreatePanel}>

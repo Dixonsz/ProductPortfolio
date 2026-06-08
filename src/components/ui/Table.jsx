@@ -1,5 +1,15 @@
 import PropTypes from "prop-types";
 
+const ALIGN_CLASS = {
+  left: "text-left",
+  center: "text-center",
+  right: "text-right",
+};
+
+function getColumnAlign(column) {
+  return column.align ?? (column.key === "actions" ? "right" : "left");
+}
+
 function Table({ columns, data, emptyMessage = "No hay registros disponibles." }) {
   return (
     <div className="overflow-hidden rounded-xl border border-outline-variant/20 bg-surface-container-lowest">
@@ -10,7 +20,9 @@ function Table({ columns, data, emptyMessage = "No hay registros disponibles." }
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-4 text-label-sm font-semibold uppercase tracking-widest text-on-surface-variant"
+                  className={`px-6 py-4 text-label-sm font-semibold uppercase tracking-widest text-on-surface-variant ${
+                    ALIGN_CLASS[getColumnAlign(column)]
+                  }`}
                 >
                   {column.label}
                 </th>
@@ -34,7 +46,12 @@ function Table({ columns, data, emptyMessage = "No hay registros disponibles." }
                   className="transition-colors hover:bg-surface-container-low/50"
                 >
                   {columns.map((column) => (
-                    <td key={column.key} className="px-6 py-5 align-middle">
+                    <td
+                      key={column.key}
+                      className={`px-6 py-5 align-middle ${
+                        ALIGN_CLASS[getColumnAlign(column)]
+                      }`}
+                    >
                       {row[column.key]}
                     </td>
                   ))}
@@ -53,6 +70,7 @@ Table.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       key: PropTypes.string.isRequired,
+      align: PropTypes.oneOf(["left", "center", "right"]),
     })
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -8,9 +8,8 @@ export const NAV_SECTIONS = [
       { label: "Marcas", path: "/brands", icon: "verified" },
       { label: "Tallas", path: "/sizes", icon: "straighten" },
       { label: "Géneros", path: "/genders", icon: "group" },
-      { label: "Estados", path: "/state", icon: "toggle_on" },
+      { label: "Estados", path: "/states", icon: "toggle_on" },
       { label: "Colores", path: "/colors", icon: "palette" },
-      { label: "Materiales", path: "/material", icon: "texture" },
     ],
   },
 ];

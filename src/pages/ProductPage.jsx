@@ -17,11 +17,7 @@ function ProductPage() {
     error: categoryError,
   } = useCategory();
   const { brands, loading: loadingBrands, error: brandError } = useBrand();
-  const {
-    genders,
-    loading: loadingGenders,
-    error: genderError,
-  } = useGender();
+  const { genders, loading: loadingGenders, error: genderError } = useGender();
   const { states, loading: loadingStates, error: stateError } = useStates();
   const [editing, setEditing] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -71,12 +67,16 @@ function ProductPage() {
     price: `$${Number(product.price ?? 0).toFixed(2)}`,
     actions: (
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" icon="edit" onClick={() => openEditPanel(product)}>
-          Editar
-        </Button>
-        <Button variant="danger" icon="delete" onClick={() => handleDelete(product)}>
-          Eliminar
-        </Button>
+        <Button
+          variant="ghost"
+          icon="edit"
+          onClick={() => openEditPanel(product)}
+        ></Button>
+        <Button
+          variant="danger"
+          icon="delete"
+          onClick={() => handleDelete(product)}
+        ></Button>
       </div>
     ),
   }));
@@ -87,9 +87,11 @@ function ProductPage() {
     loadingBrands ||
     loadingGenders ||
     loadingStates;
-  const pageError = error || categoryError || brandError || genderError || stateError;
+  const pageError =
+    error || categoryError || brandError || genderError || stateError;
 
-  if (isLoading) return <p className="text-on-surface-variant">Cargando productos...</p>;
+  if (isLoading)
+    return <p className="text-on-surface-variant">Cargando productos...</p>;
   if (pageError) return <p className="text-error">Error: {pageError}</p>;
 
   const panelTitle = editing ? "Editar producto" : "Nuevo producto";
@@ -101,12 +103,11 @@ function ProductPage() {
     <div className="space-y-8">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-label-sm font-semibold uppercase tracking-widest text-primary">
-            Catalogo
-          </p>
-          <h2 className="font-display text-headline-lg text-on-surface">Productos</h2>
+          <h2 className="font-display text-headline-lg text-on-surface">
+            Gestión de Productos
+          </h2>
           <p className="mt-2 max-w-2xl text-body-md text-on-surface-variant">
-            Administra los productos del portafolio con sus relaciones de catalogo.
+            Administra los productos disponibles en tu tienda.
           </p>
         </div>
         <Button icon="add" onClick={openCreatePanel}>
@@ -132,7 +133,11 @@ function ProductPage() {
         />
       </SlidePanel>
 
-      <Table columns={columns} data={rows} emptyMessage="Aun no hay productos registrados." />
+      <Table
+        columns={columns}
+        data={rows}
+        emptyMessage="Aun no hay productos registrados."
+      />
     </div>
   );
 }
