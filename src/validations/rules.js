@@ -48,3 +48,15 @@ export const colorSchema = z.object({
   name: nameField,
   hex_code: hexField,
 })
+
+export const productSchema = z.object({
+  category_id: z.number().int().positive('ID de categoría inválido'),
+  brand_id: z.number().int().positive('ID de marca inválido'),
+  gender_id: z.number().int().positive('ID de género inválido'),
+  state_id: z.number().int().positive('ID de estado inválido'),
+  image_url: z.string().url('URL de imagen inválida'),
+  description: z.string().trim().min(1, 'La descripción es requerida'),
+  price: z.number().positive('El precio debe ser un número positivo'),
+  is_acticve: z.boolean(),
+  material: z.string().trim().min(1, 'El material es requerido'),
+})
