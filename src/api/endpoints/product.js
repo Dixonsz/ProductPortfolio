@@ -4,10 +4,10 @@ const TABLE = 'product'
 
 const RELATIONS = `
   *,
-  category:categories(id, name),
-  brand:brands(id, name),
-  gender:genders(id, name),
-  state:states(id, name)
+  category:category(id, name),
+  brand:brand(id, name),
+  gender:gender(id, name),
+  state:state(id, name)
 `;
 
 export const fetchProducts = async () => {

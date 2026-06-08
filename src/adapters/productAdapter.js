@@ -1,5 +1,6 @@
 export const productAdapter = (raw) => ({
   id: raw.id,
+  name: raw.name,
   category_id: raw.category_id,
   brand_id: raw.brand_id,
   gender_id: raw.gender_id,

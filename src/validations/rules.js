@@ -12,7 +12,7 @@ export const nameField = z
 export const emailField = z
   .string()
   .trim()
-  .email('Email inválido')
+  .email('Email invalido')
 
 export const requiredString = z
   .string()
@@ -22,15 +22,30 @@ export const requiredString = z
 export const hexField = z
   .string()
   .trim()
-  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, 'Color hex inválido')
+  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, 'Color hex invalido')
 
-  export const categorySchema = z.object({
-    name: nameField,
+const positiveNumberField = (message) =>
+  z.preprocess((value) => {
+    const numberValue = Number(value)
+    return Number.isNaN(numberValue) ? 0 : numberValue
+  }, z.number().positive(message))
+
+const requiredIdField = (message) =>
+  z.preprocess((value) => {
+    if (value === null || value === undefined) return ''
+    return String(value).trim()
+  }, z.string().min(1, message)).transform((value) => {
+    if (/^\d+$/.test(value)) return Number(value)
+    return value
   })
 
-  export const brandSchema = z.object({
-    name: nameField,
-  })
+export const categorySchema = z.object({
+  name: nameField,
+})
+
+export const brandSchema = z.object({
+  name: nameField,
+})
 
 export const genderSchema = z.object({
   name: nameField,
@@ -50,13 +65,14 @@ export const colorSchema = z.object({
 })
 
 export const productSchema = z.object({
-  category_id: z.number().int().positive('ID de categoría inválido'),
-  brand_id: z.number().int().positive('ID de marca inválido'),
-  gender_id: z.number().int().positive('ID de género inválido'),
-  state_id: z.number().int().positive('ID de estado inválido'),
-  image_url: z.string().url('URL de imagen inválida'),
-  description: z.string().trim().min(1, 'La descripción es requerida'),
-  price: z.number().positive('El precio debe ser un número positivo'),
-  is_acticve: z.boolean(),
+  name: nameField,
+  category_id: requiredIdField('Selecciona una categoria'),
+  brand_id: requiredIdField('Selecciona una marca'),
+  gender_id: requiredIdField('Selecciona un genero'),
+  state_id: requiredIdField('Selecciona un estado'),
+  image_url: z.string().trim().url('URL de imagen invalida'),
+  description: z.string().trim().min(1, 'La descripcion es requerida'),
+  price: positiveNumberField('El precio debe ser un numero positivo'),
+  is_active: z.boolean(),
   material: z.string().trim().min(1, 'El material es requerido'),
 })
