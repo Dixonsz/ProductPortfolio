@@ -64,7 +64,7 @@ function ProductPage() {
     ...product,
     category_name: product.category?.name ?? "-",
     state_name: product.state?.name ?? "-",
-    price: `$${Number(product.price ?? 0).toFixed(2)}`,
+    price: `₡${Number(product.price ?? 0).toFixed(2)}`,
     actions: (
       <div className="flex justify-end gap-2">
         <Button

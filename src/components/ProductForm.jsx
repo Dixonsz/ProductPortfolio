@@ -48,7 +48,6 @@ function ProductForm({
   const [state, setState] = useState(
     defaultValues?.state_id ?? "",
   );
-  const [imageUrl, setImageUrl] = useState(defaultValues?.image_url || "");
   const [description, setDescription] = useState(defaultValues?.description || "");
   const [price, setPrice] = useState(defaultValues?.price ?? "");
   const [isActive, setIsActive] = useState(defaultValues?.is_active ?? true);
@@ -66,7 +65,6 @@ function ProductForm({
       brand_id: brand,
       gender_id: gender,
       state_id: state,
-      image_url: imageUrl,
       description,
       price,
       is_active: isActive,
@@ -91,7 +89,6 @@ function ProductForm({
         setBrand("");
         setGender("");
         setState("");
-        setImageUrl("");
         setDescription("");
         setPrice("");
         setIsActive(true);
@@ -161,16 +158,6 @@ function ProductForm({
       />
 
       <Input
-        id="image_url"
-        label="URL de la imagen"
-        placeholder="https://example.com/image.jpg"
-        value={imageUrl}
-        disabled={isSubmitting}
-        error={fieldErrors.image_url}
-        onChange={(event) => setImageUrl(event.target.value)}
-      />
-
-      <Input
         id="description"
         label="Descripcion"
         placeholder="Descripcion del producto"
@@ -185,7 +172,7 @@ function ProductForm({
         type="number"
         min="0"
         step="0.01"
-        label="Precio"
+        label="Precio "
         placeholder="0.00"
         value={price}
         disabled={isSubmitting}

@@ -70,7 +70,6 @@ export const productSchema = z.object({
   brand_id: requiredIdField('Selecciona una marca'),
   gender_id: requiredIdField('Selecciona un genero'),
   state_id: requiredIdField('Selecciona un estado'),
-  image_url: z.string().trim().url('URL de imagen invalida'),
   description: z.string().trim().min(1, 'La descripcion es requerida'),
   price: positiveNumberField('El precio debe ser un numero positivo'),
   is_active: z.boolean(),
