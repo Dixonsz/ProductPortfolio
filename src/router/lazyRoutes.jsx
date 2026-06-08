@@ -7,7 +7,6 @@ const BrandPage = lazy(() => import("../pages/BrandPage"));
 const GenderPage = lazy(() => import("../pages/GenderPage"));
 const StatePage = lazy(() => import("../pages/StatePage"));
 const SizePage = lazy(() => import("../pages/SizePage"));
-const ColorPage = lazy(() => import("../pages/ColorPage"));
 const ProductPage = lazy(() => import("../pages/ProductPage"));
 
 function RouteFallback() {
@@ -64,13 +63,6 @@ export function LazySizePage() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <SizePage />
-    </Suspense>
-  );
-}
-export function LazyColorPage() {
-  return (
-    <Suspense fallback={<RouteFallback />}>
-      <ColorPage />
     </Suspense>
   );
 }

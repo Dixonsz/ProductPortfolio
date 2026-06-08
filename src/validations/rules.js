@@ -59,11 +59,6 @@ export const sizeSchema = z.object({
   name: nameField,
 })
 
-export const colorSchema = z.object({
-  name: nameField,
-  hex_code: hexField,
-})
-
 export const productSchema = z.object({
   name: nameField,
   category_id: requiredIdField('Selecciona una categoria'),
