@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "../components/ui/Table";
 import Button from "../components/ui/Button";
 import SlidePanel from "../components/ui/SlidePanel";
@@ -10,6 +11,7 @@ import { useGender } from "../hooks/useGender";
 import { useStates } from "../hooks/useStates";
 
 function ProductPage() {
+  const navigate = useNavigate();
   const { products, loading, error, create, update, remove } = useProduct();
   const {
     categories,
@@ -35,6 +37,10 @@ function ProductPage() {
   const openEditPanel = (product) => {
     setEditing(product);
     setIsPanelOpen(true);
+  };
+
+  const openProductVariants = (product) => {
+    navigate(`/products/${product.id}/variants`);
   };
 
   const handleCreate = async (data) => {
@@ -73,6 +79,12 @@ function ProductPage() {
           onClick={() => openEditPanel(product)}
         ></Button>
         <Button
+          variant="ghost"
+          icon="add_circle"
+          onClick={() => openProductVariants(product)}
+          title="Ver variantes"
+        ></Button>
+        <Button
           variant="danger"
           icon="delete"
           onClick={() => handleDelete(product)}
@@ -88,7 +100,11 @@ function ProductPage() {
     loadingGenders ||
     loadingStates;
   const pageError =
-    error || categoryError || brandError || genderError || stateError;
+    error ||
+    categoryError ||
+    brandError ||
+    genderError ||
+    stateError;
 
   if (isLoading)
     return <p className="text-on-surface-variant">Cargando productos...</p>;

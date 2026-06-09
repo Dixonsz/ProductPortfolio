@@ -70,3 +70,10 @@ export const productSchema = z.object({
   is_active: z.boolean(),
   material: z.string().trim().min(1, 'El material es requerido'),
 })
+
+export const productVariantSchema = z.object({
+  product_id: requiredIdField('Selecciona un producto'),
+  size_id: requiredIdField('Selecciona una talla'),
+  code_hex: hexField,
+  image_url: z.string().trim().min(1, 'La URL de la imagen es requerida'),
+})

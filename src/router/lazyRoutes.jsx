@@ -8,6 +8,7 @@ const GenderPage = lazy(() => import("../pages/GenderPage"));
 const StatePage = lazy(() => import("../pages/StatePage"));
 const SizePage = lazy(() => import("../pages/SizePage"));
 const ProductPage = lazy(() => import("../pages/ProductPage"));
+const ProductVariantPage = lazy(() => import("../pages/ProductVariantPage"));
 
 function RouteFallback() {
   return <p className="text-on-surface-variant">Cargando vista...</p>;
@@ -70,6 +71,14 @@ export function LazyProductPage() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <ProductPage />
+    </Suspense>
+  );
+}
+
+export function LazyProductVariantPage() {
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      <ProductVariantPage />
     </Suspense>
   );
 }

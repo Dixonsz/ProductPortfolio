@@ -8,6 +8,7 @@ import {
   LazySizePage,
   LazyMainLayout,
   LazyProductPage,
+  LazyProductVariantPage,
 } from "./lazyRoutes";
 
 export const router = createBrowserRouter([
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: "products",
         element: <LazyProductPage />,
+      },
+      {
+        path: "products/:productId/variants",
+        element: <LazyProductVariantPage />,
       },
       {
         path: "categories",
