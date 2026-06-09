@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import Button from "./ui/Button";
-import Input from "./ui/Input";
 import ComboBox from "./ui/ComboBox";
+import ImageUploader from "./ui/ImageUploader";
+import { useImageUpload } from "../hooks/useImageUpload";
 import { productVariantSchema } from "../validations/rules";
 
 function getSubmitLabel(isSubmitting, isEditing) {
@@ -42,6 +43,27 @@ function ProductVariantForm({
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    uploading,
+    preview,
+    handleFileSelect,
+    clearPreview,
+  } = useImageUpload();
+
+  const handleImageChange = async (file) => {
+    setFormError("");
+    setFieldErrors((currentErrors) => ({
+      ...currentErrors,
+      image_url: undefined,
+    }));
+
+    try {
+      const path = await handleFileSelect(file);
+      if (path) setImageUrl(path);
+    } catch (err) {
+      setFormError(err.message);
+    }
+  };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -65,7 +87,8 @@ function ProductVariantForm({
 
     try {
       await onSubmit(result.data);
-      if (!defaultValues) {
+      clearPreview();
+      if (!isEditing) {
         setProduct("");
         setSize("");
         setCodeHex("#000000");
@@ -136,15 +159,17 @@ function ProductVariantForm({
         )}
       </div>
 
-      <Input
-        id="image_url"
-        label="URL de la Imagen"
-        placeholder="https://example.com/image.jpg"
-        value={image_url}
-        disabled={isSubmitting}
-        error={fieldErrors.image_url}
-        onChange={(event) => setImageUrl(event.target.value)}
+      <ImageUploader
+        currentPath={image_url}
+        preview={preview}
+        uploading={uploading}
+        onChange={handleImageChange}
       />
+      {fieldErrors.image_url && (
+        <p className="text-label-sm font-medium text-error">
+          {fieldErrors.image_url}
+        </p>
+      )}
 
       {formError && (
         <p className="text-label-sm font-medium text-error">{formError}</p>
@@ -153,7 +178,7 @@ function ProductVariantForm({
       <div className="flex flex-wrap gap-2">
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || uploading}
           icon={isEditing ? "save" : "add"}
         >
           {getSubmitLabel(isSubmitting, isEditing)}
