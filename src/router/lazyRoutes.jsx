@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 
 const MainLayout = lazy(() => import("../pages/MainLayout"));
+const LoginPage = lazy(() => import("../pages/LoginPage"));
 const DashboardPage = lazy(() => import("../pages/DashboardPage"));
 const CategoryPage = lazy(() => import("../pages/CategoryPage"));
 const BrandPage = lazy(() => import("../pages/BrandPage"));
@@ -18,6 +19,14 @@ export function LazyMainLayout() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <MainLayout />
+    </Suspense>
+  );
+}
+
+export function LazyLoginPage() {
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      <LoginPage />
     </Suspense>
   );
 }
@@ -51,8 +60,8 @@ export function LazyGenderPage() {
       <GenderPage />
     </Suspense>
   );
-
 }
+
 export function LazyStatePage() {
   return (
     <Suspense fallback={<RouteFallback />}>

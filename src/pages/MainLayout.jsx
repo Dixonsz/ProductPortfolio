@@ -1,4 +1,3 @@
-// pages/MainLayout.jsx
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/ui/Sidebar";
 
@@ -13,7 +12,7 @@ export default function MainLayout() {
               Catálogo de productos
             </p>
             <h1 className="font-display text-headline-md text-on-surface">
-              Panel de Administrativo
+              Panel administrativo
             </h1>
           </div>
           <div className="hidden items-center gap-3 md:flex">

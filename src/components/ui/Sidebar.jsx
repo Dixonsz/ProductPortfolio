@@ -1,10 +1,18 @@
-import { NavLink } from "react-router-dom";
-import { useSidebar } from "../../hooks/useSidebar";
+import { NavLink, useNavigate } from "react-router-dom";
 import { NAV_SECTIONS } from "../../constants/navigation";
+import { useAuth } from "../../hooks/useAuth";
+import { useSidebar } from "../../hooks/useSidebar";
 import { SidebarProps } from "../../types/sidebar.types";
 
 export default function Sidebar({ sections = NAV_SECTIONS }) {
   const { collapsed, toggle } = useSidebar();
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <aside
@@ -58,12 +66,15 @@ export default function Sidebar({ sections = NAV_SECTIONS }) {
                       `flex items-center gap-4 px-3 py-3 transition-all duration-300 ${
                         isActive
                           ? "border-r-4 border-primary bg-surface-container text-primary"
-                          : "text-on-surface-variant hover:text-primary hover:bg-surface-container"
+                          : "text-on-surface-variant hover:bg-surface-container hover:text-primary"
                       }`
                     }
                   >
                     {item.icon && (
-                      <span className="material-symbols-outlined flex-shrink-0" aria-hidden="true">
+                      <span
+                        className="material-symbols-outlined flex-shrink-0"
+                        aria-hidden="true"
+                      >
                         {item.icon}
                       </span>
                     )}
@@ -79,6 +90,36 @@ export default function Sidebar({ sections = NAV_SECTIONS }) {
           </div>
         ))}
       </nav>
+
+      <div className="mt-6 border-t border-outline-variant/60 px-3 pt-5">
+        {!collapsed && (
+          <div className="mb-4 px-3">
+            <p className="truncate text-body-md font-semibold text-on-surface">
+              {user?.name ?? "Usuario"}
+            </p>
+            <p className="truncate text-label-sm text-on-surface-variant">
+              {user?.email ?? "Sesión activa"}
+            </p>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          aria-label="Cerrar sesión"
+          title="Cerrar sesión"
+          className="flex w-full items-center gap-4 px-3 py-3 text-on-surface-variant transition-all duration-300 hover:bg-error-container hover:text-on-error-container"
+        >
+          <span className="material-symbols-outlined flex-shrink-0" aria-hidden="true">
+            logout
+          </span>
+          {!collapsed && (
+            <span className="whitespace-nowrap text-body-md font-medium">
+              Cerrar sesión
+            </span>
+          )}
+        </button>
+      </div>
     </aside>
   );
 }
