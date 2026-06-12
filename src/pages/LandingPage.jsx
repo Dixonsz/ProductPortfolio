@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/catalog/ProductCard";
 import ProductFilterSidebar from "../components/catalog/ProductFilterSidebar";
 import { useBrand } from "../hooks/useBrand";
@@ -12,6 +12,8 @@ import {
   filterProducts,
   PRODUCT_FILTER_DEFAULTS,
 } from "../utils/productFilters";
+
+const PRODUCTS_PER_PAGE = 10;
 
 function idsAreEqual(firstId, secondId) {
   return String(firstId) === String(secondId);
@@ -108,6 +110,9 @@ function LandingPage() {
   const { states, error: stateError } = useStates();
   const { sizes, error: sizeError } = useSize();
   const [filters, setFilters] = useState(PRODUCT_FILTER_DEFAULTS);
+  const [showDesktopFilters, setShowDesktopFilters] = useState(true);
+  const [showMobileFilters, setShowMobileFilters] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const sizesById = useMemo(
     () =>
@@ -181,8 +186,20 @@ function LandingPage() {
   );
   const heroProduct = filteredProducts[0] ?? productsWithVariants[0];
   const heroImage = getProductImage(heroProduct);
-  const highlightedProducts = filteredProducts.slice(0, 4);
-  const remainingProducts = filteredProducts.slice(4);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE),
+  );
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const firstProductIndex = (safeCurrentPage - 1) * PRODUCTS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(
+    firstProductIndex,
+    firstProductIndex + PRODUCTS_PER_PAGE,
+  );
+  const pageRangeLabel =
+    filteredProducts.length > 0
+      ? `${firstProductIndex + 1}-${firstProductIndex + paginatedProducts.length}`
+      : "0";
   const isLoading = loadingProducts;
   const pageError = productError;
   const supportingError =
@@ -206,6 +223,10 @@ function LandingPage() {
     onClear: () => setFilters(PRODUCT_FILTER_DEFAULTS),
   };
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
   if (isLoading) {
     return <PageMessage>Cargando catalogo...</PageMessage>;
   }
@@ -225,10 +246,31 @@ function LandingPage() {
       <ProductFilterSidebar
         {...sidebarProps}
         idPrefix="desktop-product-filter"
-        className="fixed left-0 top-0 z-40 hidden h-full w-72 overflow-y-auto border-r pt-28 lg:block"
+        onHide={() => setShowDesktopFilters(false)}
+        className={`fixed left-0 top-0 z-40 h-full w-72 overflow-y-auto border-r pt-28 ${
+          showDesktopFilters ? "hidden lg:block" : "hidden"
+        }`}
       />
 
-      <header className="relative min-h-[760px] overflow-hidden pt-20 lg:ml-72">
+      {!showDesktopFilters && (
+        <button
+          type="button"
+          onClick={() => setShowDesktopFilters(true)}
+          className="fixed left-6 top-24 z-50 hidden h-12 w-12 items-center justify-center rounded-full bg-primary text-on-primary shadow-xl transition hover:bg-primary/90 lg:inline-flex"
+          aria-label="Mostrar filtros"
+          title="Mostrar filtros"
+        >
+          <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
+            tune
+          </span>
+        </button>
+      )}
+
+      <header
+        className={`relative min-h-[760px] overflow-hidden pt-20 ${
+          showDesktopFilters ? "lg:ml-72" : ""
+        }`}
+      >
         <div className="absolute inset-0 bg-surface-container">
           {heroImage ? (
             <img
@@ -261,40 +303,72 @@ function LandingPage() {
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <a
-                href="#catalog"
+                href="https://wa.me/50684147627?text=Hola,%20me%20interesa%20comprar.%20Quiero%20ver%20las%20opciones%20disponibles."
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-9 text-label-sm font-semibold uppercase tracking-widest text-on-primary transition hover:bg-primary/90"
+                target="_blank" rel="noopener noreferrer"
+                
               >
-                Explorar ahora
+                 <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="mr-2 h-5 w-5"
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.120 1.518 5.854L.057 23.428a.75.75 0 0 0 .916.919l5.701-1.493A11.951 11.951 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.686-.516-5.21-1.415l-.374-.22-3.384.887.893-3.294-.242-.382A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+  </svg>
+
+                Consultar por WhatsApp
               </a>
-              <a
-                href="/login"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-primary px-9 text-label-sm font-semibold uppercase tracking-widest text-primary transition hover:bg-primary/5"
-              >
-                Administrar
-              </a>
+            
             </div>
           </div>
         </div>
       </header>
 
       <section className="bg-surface-container-low px-6 py-8 lg:hidden">
-        <ProductFilterSidebar
-          {...sidebarProps}
-          idPrefix="mobile-product-filter"
-          className="border border-outline-variant/30"
-        />
+        {showMobileFilters ? (
+          <ProductFilterSidebar
+            {...sidebarProps}
+            idPrefix="mobile-product-filter"
+            onHide={() => setShowMobileFilters(false)}
+            className="border border-outline-variant/30"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowMobileFilters(true)}
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-label-sm font-semibold uppercase tracking-widest text-on-primary transition hover:bg-primary/90"
+            aria-label="Mostrar filtros"
+          >
+            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+              tune
+            </span>
+            Mostrar filtros
+          </button>
+        )}
       </section>
 
-      <section id="catalog" className="px-6 py-20 lg:ml-72 lg:px-16 lg:py-28">
+      <section
+        id="catalog"
+        className={`px-6 py-20 lg:px-16 lg:py-28 ${
+          showDesktopFilters ? "lg:ml-72" : ""
+        }`}
+      >
         <div className="mb-14 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
             <h2 className="font-display text-headline-lg text-on-surface">
-              Nuevas llegadas
+              Nuevas Colecciones
             </h2>
             <p className="mt-2 text-body-md text-on-surface-variant">
               {filteredProducts.length} de {productsWithVariants.length}{" "}
               productos disponibles
             </p>
+            {filteredProducts.length > 0 && (
+              <p className="mt-1 text-label-sm text-on-surface-variant/70">
+                Mostrando {pageRangeLabel} de {filteredProducts.length}
+              </p>
+            )}
             {supportingError && (
               <p className="mt-2 max-w-2xl text-sm text-error">
                 Algunos filtros o variantes no se pudieron cargar: {supportingError}
@@ -314,13 +388,12 @@ function LandingPage() {
           </div>
         </div>
 
-        {highlightedProducts.length > 0 && (
-          <div className="mb-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5">
-            {highlightedProducts.map((product, index) => (
+        {paginatedProducts.length > 0 && (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5">
+            {paginatedProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
-                featured={index === 0}
                 compact
                 imageFit="contain"
               />
@@ -328,16 +401,62 @@ function LandingPage() {
           </div>
         )}
 
-        {remainingProducts.length > 0 && (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {remainingProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                compact
-                imageFit="contain"
-              />
-            ))}
+        {totalPages > 1 && (
+          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-outline-variant/30 pt-6 sm:flex-row">
+            <p className="text-label-sm font-semibold uppercase tracking-widest text-on-surface-variant">
+              Pagina {safeCurrentPage} de {totalPages}
+            </p>
+            <div className="flex max-w-full items-center gap-2 overflow-x-auto pb-1">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={safeCurrentPage === 1}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-outline-variant/40 bg-surface-container text-on-surface-variant transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Pagina anterior"
+                title="Pagina anterior"
+              >
+                <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                  chevron_left
+                </span>
+              </button>
+
+              {Array.from({ length: totalPages }, (_, index) => {
+                const pageNumber = index + 1;
+                const isActivePage = pageNumber === safeCurrentPage;
+
+                return (
+                  <button
+                    key={pageNumber}
+                    type="button"
+                    onClick={() => setCurrentPage(pageNumber)}
+                    className={`h-11 min-w-11 rounded-full px-3 text-label-sm font-semibold transition ${
+                      isActivePage
+                        ? "bg-primary text-on-primary"
+                        : "border border-outline-variant/40 bg-surface-container text-on-surface-variant hover:border-primary hover:text-primary"
+                    }`}
+                    aria-label={`Ir a pagina ${pageNumber}`}
+                    aria-current={isActivePage ? "page" : undefined}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentPage((page) => Math.min(totalPages, page + 1))
+                }
+                disabled={safeCurrentPage === totalPages}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-outline-variant/40 bg-surface-container text-on-surface-variant transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Pagina siguiente"
+                title="Pagina siguiente"
+              >
+                <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                  chevron_right
+                </span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -361,71 +480,40 @@ function LandingPage() {
 
       <section
         id="atelier"
-        className="bg-surface-container px-6 py-24 lg:ml-72 lg:px-16"
+        className={`bg-surface-container px-6 py-24 lg:px-16 ${
+          showDesktopFilters ? "lg:ml-72" : ""
+        }`}
       >
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-label-sm font-semibold uppercase tracking-[0.3em] text-primary">
-            Atelier
+            Amar y Ya
           </p>
           <h2 className="mt-4 font-display text-headline-lg text-on-surface">
-            Variantes, textura y disponibilidad en una sola vista
+            Encuentra tu opción ideal en segundos
           </h2>
           <p className="mt-4 text-body-lg text-on-surface-variant">
-            Cada card toma los datos reales del producto y sus variantes:
-            imagen, color, talla, material y estado. El estilo es editorial,
-            pero la data sigue viva.
+            Visualiza cada prenda con sus colores, tallas, materiales y disponibilidad actualizada. Una experiencia pensada para que descubras cada detalle, elijas con confianza y encuentres justo lo que buscas.
           </p>
         </div>
       </section>
 
       <footer
         id="journal"
-        className="border-t border-outline-variant/50 bg-surface-container-low px-6 py-16 lg:ml-72 lg:px-16"
+        className={`border-t border-outline-variant/50 bg-surface-container-low px-6 py-16 lg:px-16 ${
+          showDesktopFilters ? "lg:ml-72" : ""
+        }`}
       >
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
             <span className="font-display text-headline-lg text-primary">
-              ELEVATION
+              Amar y Ya
             </span>
             <p className="mt-4 max-w-xl text-body-md text-on-surface-variant">
-              Catalogo dinamico para presentar productos con una estetica de
-              moda, sin perder la estructura modular del frontend.
+           Explora un catálogo visual, moderno y fácil de usar, diseñado para que descubras productos, compares opciones y compres con mayor confianza.
             </p>
           </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-label-sm font-semibold uppercase tracking-widest text-on-surface">
-              Navegacion
-            </span>
-            <a
-              className="text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary"
-              href="#catalog"
-            >
-              Coleccion
-            </a>
-            <a
-              className="text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary"
-              href="#atelier"
-            >
-              Atelier
-            </a>
-          </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-label-sm font-semibold uppercase tracking-widest text-on-surface">
-              Gestion
-            </span>
-            <a
-              className="text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary"
-              href="/login"
-            >
-              Iniciar sesion
-            </a>
-            <a
-              className="text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary"
-              href="/products"
-            >
-              Productos
-            </a>
-          </div>
+         
+          
         </div>
       </footer>
 

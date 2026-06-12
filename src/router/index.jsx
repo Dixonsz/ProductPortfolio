@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import {
   LazyBrandPage,
   LazyCategoryPage,
@@ -16,8 +16,12 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
-    path: "/landing",
+    path: "/",
     element: <LazyLandingPage />,
+  },
+  {
+    path: "/landing",
+    element: <Navigate to="/" replace />,
   },
   {
     path: "/login",
@@ -31,7 +35,7 @@ export const router = createBrowserRouter([
         element: <LazyMainLayout />,
         children: [
           {
-            index: true,
+            path: "dashboard",
             element: <LazyDashboardPage />,
           },
           {

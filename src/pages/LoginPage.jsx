@@ -26,10 +26,11 @@ export default function LoginPage() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const redirectTo = location.state?.from?.pathname ?? "/";
+  const redirectTo = location.state?.from?.pathname ?? "/dashboard";
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -71,13 +72,17 @@ export default function LoginPage() {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <main className="app-shell flex min-h-screen items-center justify-center px-6 py-10">
       <section className="grid w-full max-w-5xl overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-lowest shadow-sm lg:grid-cols-[1fr_420px]">
         <div className="flex min-h-[520px] flex-col justify-between bg-primary px-8 py-10 text-on-primary lg:px-12">
           <div>
             <p className="text-label-sm font-semibold uppercase tracking-widest text-on-primary/75">
-              Catálogo en Línea 
+              Catálogo en Línea
             </p>
             <h1 className="mt-5 max-w-xl font-display text-headline-lg">
               Amar y Ya
@@ -122,18 +127,50 @@ export default function LoginPage() {
               disabled={isSubmitting}
             />
 
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              label="Contraseña"
-              placeholder="Ingresa tu contraseña"
-              value={values.password}
-              onChange={handleChange}
-              error={errors.password}
-              autoComplete="current-password"
-              disabled={isSubmitting}
-            />
+            <div className="space-y-2">
+              <label
+                htmlFor="password"
+                className="block text-label-sm font-semibold uppercase tracking-widest text-on-surface-variant"
+              >
+                Contraseña
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Ingresa tu contraseña"
+                  value={values.password}
+                  onChange={handleChange}
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                  className="w-full rounded-full border border-outline-variant/50 bg-surface-container-low px-4 py-3 pr-12 text-body-md text-on-surface outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  aria-invalid={Boolean(errors.password)}
+                  aria-describedby={errors.password ? "password-error" : undefined}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  disabled={isSubmitting}
+                  className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-on-surface-variant transition hover:bg-surface-container-high hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                  title={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                >
+                  <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                    {showPassword ? "visibility_off" : "visibility"}
+                  </span>
+                </button>
+              </div>
+              {errors.password && (
+                <p id="password-error" className="text-label-sm font-medium text-error">
+                  {errors.password}
+                </p>
+              )}
+            </div>
           </div>
 
           {errors.root && (

@@ -104,6 +104,7 @@ function ProductFilterSidebar({
   resultCount,
   onChange,
   onClear,
+  onHide,
   idPrefix = "product-filter",
   className = "",
 }) {
@@ -142,17 +143,32 @@ function ProductFilterSidebar({
             </p>
           )}
         </div>
-        <button
-          type="button"
-          onClick={clearFilters}
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition hover:bg-surface-container-high hover:text-primary"
-          aria-label="Limpiar filtros"
-          title="Limpiar filtros"
-        >
-          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
-            restart_alt
-          </span>
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant transition hover:bg-surface-container-high hover:text-primary"
+            aria-label="Limpiar filtros"
+            title="Limpiar filtros"
+          >
+            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+              restart_alt
+            </span>
+          </button>
+          {onHide && (
+            <button
+              type="button"
+              onClick={onHide}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant transition hover:bg-surface-container-high hover:text-primary"
+              aria-label="Ocultar filtros"
+              title="Ocultar filtros"
+            >
+              <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                left_panel_close
+              </span>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -325,6 +341,7 @@ ProductFilterSidebar.propTypes = {
   resultCount: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   onClear: PropTypes.func,
+  onHide: PropTypes.func,
   idPrefix: PropTypes.string,
   className: PropTypes.string,
 };
@@ -339,6 +356,7 @@ ProductFilterSidebar.defaultProps = {
   colors: [],
   resultCount: null,
   onClear: null,
+  onHide: null,
   idPrefix: "product-filter",
   className: "",
 };

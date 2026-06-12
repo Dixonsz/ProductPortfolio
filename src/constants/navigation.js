@@ -2,7 +2,7 @@ export const NAV_SECTIONS = [
   {
     label: "Gestión",
     items: [
-      { label: "Dashboard", path: "/", icon: "dashboard" },
+      { label: "Dashboard", path: "/dashboard", icon: "dashboard" },
       { label: "Productos", path: "/products", icon: "shopping_bag" },
       { label: "Categorías", path: "/categories", icon: "category" },
       { label: "Marcas", path: "/brands", icon: "verified" },
