@@ -4,6 +4,7 @@ import {
   LazyCategoryPage,
   LazyDashboardPage,
   LazyGenderPage,
+  LazyLandingPage,
   LazyLoginPage,
   LazyMainLayout,
   LazyProductPage,
@@ -14,6 +15,10 @@ import {
 import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
+  {
+    path: "/landing",
+    element: <LazyLandingPage />,
+  },
   {
     path: "/login",
     element: <LazyLoginPage />,

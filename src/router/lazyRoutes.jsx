@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 
 const MainLayout = lazy(() => import("../pages/MainLayout"));
+const LandingPage = lazy(() => import("../pages/LandingPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const DashboardPage = lazy(() => import("../pages/DashboardPage"));
 const CategoryPage = lazy(() => import("../pages/CategoryPage"));
@@ -19,6 +20,14 @@ export function LazyMainLayout() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <MainLayout />
+    </Suspense>
+  );
+}
+
+export function LazyLandingPage() {
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      <LandingPage />
     </Suspense>
   );
 }
